@@ -1,0 +1,133 @@
+/* Shared enhancements: 3D hero network, tilt cards, 3D Wonder Device,
+   social icons, footer links and reduced-motion support.
+   Linked after each page's inline styles so these rules win on equal specificity. */
+
+/* ── HERO NETWORK (canvas is injected by js/enhancements.js) ── */
+.hero-net {
+  position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;
+  pointer-events: none; opacity: 0; transition: opacity 1.6s ease;
+  /* keep the area behind the headline calm so the text stays readable */
+  -webkit-mask-image: radial-gradient(ellipse 48% 42% at 50% 50%, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.22) 45%, #000 100%);
+  mask-image: radial-gradient(ellipse 48% 42% at 50% 50%, rgba(0, 0, 0, 0.22) 0%, rgba(0, 0, 0, 0.22) 45%, #000 100%);
+}
+.hero-net.on { opacity: 1; }
+@media (max-width: 640px) {
+  .hero-net.on { opacity: 0.7; }
+}
+
+/* ── TILT CARDS ── */
+/* The card itself only lifts, so its text stays sharp; the artwork inside tilts in 3D. */
+.project-card.tilt.visible {
+  transform: translateY(var(--lift, 0px));
+  transition: transform 0.4s ease, box-shadow 0.4s ease, opacity 0.7s ease;
+}
+.project-card.tilt.is-tilting { --lift: -6px; }
+.project-card.tilt .project-visual { perspective: 900px; }
+.project-card.tilt::after {
+  content: ''; position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background: radial-gradient(520px circle at var(--mx, 50%) var(--my, 50%), rgba(0, 229, 255, 0.13), transparent 62%);
+  opacity: 0; transition: opacity 0.4s ease;
+}
+.project-card.tilt.is-tilting::after { opacity: 1; }
+.project-card.tilt .project-visual > :not(.project-visual-pattern) {
+  transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translate(calc(var(--px, 0) * -12px), calc(var(--py, 0) * -10px));
+  transition: transform 0.25s ease-out;
+}
+/* the Wonder Device already rotates on its own, so it only gets the parallax shift */
+.project-card.tilt .project-visual > .wd {
+  transform: translate(calc(var(--px, 0) * -12px), calc(var(--py, 0) * -10px));
+}
+.project-card.tilt .project-visual-pattern {
+  transform: translate(calc(var(--px, 0) * 8px), calc(var(--py, 0) * 6px)) scale(1.06);
+  transition: transform 0.25s ease-out;
+}
+
+/* ── 3D WONDER DEVICE ── */
+.wd {
+  position: relative; z-index: 1; width: 100%;
+  display: flex; flex-direction: column; align-items: center; gap: 0.85rem;
+}
+.wd-stage {
+  --w: 146px;
+  --t: 16px; /* device thickness, matched in JS */
+  position: relative; padding: 14px 48px 26px;
+  perspective: 900px; user-select: none; -webkit-user-select: none;
+}
+.wd-stage.is-3d { cursor: grab; touch-action: pan-y; }
+.wd-stage.dragging { cursor: grabbing; }
+.wd-stage::before {
+  content: ''; position: absolute; left: 50%; top: 50%; width: 260px; height: 260px;
+  transform: translate(-50%, -50%); pointer-events: none;
+  background: radial-gradient(circle, rgba(0, 229, 255, 0.16), transparent 65%);
+}
+.wd-stage::after {
+  content: ''; position: absolute; left: 50%; bottom: 6px; width: 170px; height: 20px;
+  transform: translateX(-50%); pointer-events: none; filter: blur(5px);
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.75), transparent 70%);
+}
+.wd-device {
+  position: relative; z-index: 1; width: var(--w); aspect-ratio: 420 / 930;
+  transform-style: preserve-3d; transform: rotateX(7deg) rotateY(-24deg);
+  will-change: transform;
+}
+.wd-layer {
+  position: absolute; inset: 0; border-radius: 15px;
+  background: #0b0c0f; border: 1px solid #262a32;
+}
+.wd-front, .wd-back {
+  position: absolute; inset: 0; border-radius: 15px; overflow: hidden;
+  -webkit-backface-visibility: hidden; backface-visibility: hidden;
+}
+.wd-front { background: #050608; border: 2px solid #1e2128; box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55); }
+.wd-stage.is-3d .wd-front { transform: translateZ(calc(var(--t) / 2 + 0.5px)); box-shadow: none; }
+.wd-back {
+  display: none; border: 1px solid #272a32;
+  background: linear-gradient(145deg, #1b1d24, #0b0c0f 70%);
+}
+.wd-stage.is-3d .wd-back { display: block; transform: rotateY(180deg) translateZ(calc(var(--t) / 2 + 0.5px)); }
+.project-card .project-visual .wd-device .wd-front img {
+  position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none;
+  object-fit: cover; border-radius: 0; filter: none; transform: none;
+  opacity: 0; transition: opacity 0.6s ease;
+}
+.project-card .project-visual .wd-device .wd-front img.on { opacity: 1; }
+.wd-glare {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(112deg, transparent 32%, rgba(255, 255, 255, 0.16) 47%, transparent 62%);
+  background-size: 300% 100%; background-position: 50% 0;
+}
+.wd-tabs { display: flex; flex-wrap: wrap; gap: 0.4rem; justify-content: center; }
+.wd-tab {
+  font-family: 'Fira Code', monospace; font-size: 0.68rem; font-weight: 500;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.65); background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 100px;
+  padding: 0.32rem 0.75rem; cursor: pointer;
+  transition: color 0.3s, background 0.3s, border-color 0.3s;
+}
+.wd-tab:hover { color: #fff; border-color: rgba(0, 184, 212, 0.5); }
+.wd-tab[aria-pressed="true"] { color: #0a0e1a; background: #00b8d4; border-color: #00b8d4; }
+.wd-tab:focus-visible { outline: 2px solid #00e5ff; outline-offset: 2px; }
+.wd-hint {
+  display: none; font-family: 'Fira Code', monospace; font-size: 0.66rem;
+  letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255, 255, 255, 0.35);
+}
+.wd-stage.is-3d ~ .wd-hint { display: block; }
+
+/* ── SOCIAL ICONS & FOOTER LINKS ── */
+.social-link svg { width: 18px; height: 18px; fill: currentColor; }
+.footer-links { display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap; list-style: none; margin-bottom: 1rem; }
+.footer-links a { font-size: 0.82rem; color: rgba(255, 255, 255, 0.55); text-decoration: none; transition: color 0.3s; }
+.footer-links a:hover { color: #00b8d4; }
+
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero-orb, .hero-scroll span::after { animation: none; }
+  .hero-eyebrow, .hero-pill, .hero h1, .hero-sub, .hero-buttons { animation: none; opacity: 1; }
+  .hero-scroll { animation: none; opacity: 1; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .hero-net { transition: none; }
+  .project-card.tilt.visible { transform: none; }
+  .wd-front img { transition: none; }
+}

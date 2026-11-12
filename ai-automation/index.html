@@ -11,7 +11,12 @@
   <meta property="og:description" content="Less admin. More time for your business. Practical AI automation from an engineer with 25+ years of enterprise experience.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://www.londoniac.co.uk/ai-automation/">
+  <meta property="og:image" content="https://www.londoniac.co.uk/images/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="LondonIAC: modern websites and AI automation for businesses that mean business">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://www.londoniac.co.uk/images/og-image.png">
 
   <!-- Google Analytics (GA4) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-NX5SZRQQP8"></script>
@@ -444,6 +449,7 @@
       .form-row { grid-template-columns: 1fr; }
     }
   </style>
+  <link rel="stylesheet" href="/css/enhancements.css">
 </head>
 <body>
 
@@ -784,6 +790,12 @@
   <!-- FOOTER -->
   <footer>
     <div class="footer-logo"><a href="/">London <span>Infrastructure As Code</span></a></div>
+    <ul class="footer-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="https://www.youtube.com/@LondonIAC" target="_blank" rel="noopener">YouTube</a></li>
+      <li><a href="https://www.linkedin.com/company/londoniac" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="mailto:dennis@londoniac.co.uk">Email</a></li>
+    </ul>
     <p>&copy; 2024&ndash;2026 Dennis McCarthy &middot; londoniac.co.uk</p>
     <p>Research: <a href="https://www.gov.uk/government/publications/ai-adoption-survey-2026" target="_blank" rel="noopener">UK Government, AI Adoption Survey 2026</a>, published 29 October 2026. Survey findings are self-reported and should not be read as guaranteed results.</p>
   </footer>
@@ -830,6 +842,7 @@
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     reveals.forEach(el => observer.observe(el));
   </script>
+  <script src="/js/enhancements.js" defer></script>
 
 </body>
 </html>
